@@ -6,29 +6,36 @@ export Logistic, logit, logistic, logisticate, complement
 
 struct Logistic{T<:AbstractFloat} <: Real
 	t::T
+	Logistic(t::T) where {T<:AbstractFloat} = new{T}(t)
 end
 Logistic(t::Real) = Logistic(float(t))
+Logistic(x::Logistic) = x
+Logistic{T}(x::Logistic) where {T<:AbstractFloat} = Logistic(T(x.t))
 
-function Base.convert(::Type{T}, x::Logistic) where {T<:AbstractFloat}
-	return logistic(T(x.t))
-end
+Base.convert(::Type{T}, x::Logistic) where 
+	{T<:AbstractFloat} = logistic(T(x.t))
+Base.convert(::Type{Logistic}, x::AbstractFloat) = logisticate(x)
+Base.convert(::Type{Logistic{T}}, x::AbstractFloat) where 
+	{T<:AbstractFloat} = logisticate(T, x)
+
 (::Type{T})(x::Logistic) where {T<:AbstractFloat} = convert(T, x)
-function Base.promote_rule(::Type{Logistic{T1}}, ::Type{Logistic{T2}}) where 
-		{T1<:AbstractFloat, T2<:AbstractFloat}
-	return Logistic{promote_type(T1, T2)}
-end
-function Base.promote_rule(::Type{T1}, ::Type{Logistic{T2}}) where 
-		{T1<:AbstractFloat, T2<:AbstractFloat}
-	return promote_type(T1, T2)
-end
-function Base.promote_rule(::Type{T1}, ::Type{Logistic{T2}}) where 
-		{T1<:Real, T2<:AbstractFloat}
-	return T2
-end
-function Base.promote_rule(::Type{BigFloat}, ::Type{Logistic{T}}) where 
-		{T<:AbstractFloat}
-	return BigFloat
-end
+
+Base.promote_rule(::Type{Logistic{T1}}, ::Type{Logistic{T2}}) where 
+	{T1<:AbstractFloat, T2<:AbstractFloat} = Logistic{promote_type(T1, T2)}
+Base.promote_rule(::Type{Logistic}, ::Type{T}) where 
+	{T<:AbstractFloat} = T
+Base.promote_rule(::Type{Logistic}, ::Type{Logistic{T}}) where 
+	{T<:AbstractFloat} = Logistic{T}
+Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where 
+	{T1<:AbstractFloat, T2<:AbstractFloat} = promote_type(T1, T2)
+Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where 
+	{T1<:AbstractFloat, T2<:Real} = T1
+Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where 
+	{T1<:AbstractFloat, T2<:AbstractIrrational} = T1
+Base.promote_rule(::Type{Logistic{T}}, ::Type{BigFloat}) where 
+	{T<:AbstractFloat} = BigFloat
+Base.promote_rule(::Type{Logistic{T}}, ::Type{Bool}) where 
+	{T<:AbstractFloat} = T
 
 function logit(x::Real)
 	0 <= x <= 1 && return log(x / (1 - x))
@@ -38,9 +45,20 @@ logit(x::Logistic) = x.t
 
 logistic(t::Real) = 1 / (1 + exp(-t))
 
-Base.log(x::Logistic) = -log1p(exp(-x.t))
+function Base.log(x::Logistic)
+	u = exp(-x.t)
+	if u == u + 1
+		return x.t
+	else
+		return -log1p(u)
+	end
+end
 
 logisticate(x::Real) = Logistic(logit(x))
+logisticate(T::Type{<:AbstractFloat}, x::Real) = logisticate(T(x))
+logisticate(::Type{Logistic}, x::Real) = Logistic(logit(x))
+logisticate(::Type{<:Logistic{T}}, x::Real) where 
+	{T<:AbstractFloat} = logisticate(T(x))
 
 complement(x::Logistic) = Logistic(-x.t)
 
@@ -57,9 +75,20 @@ Base.one(::Logistic{T}) where {T<:AbstractFloat} = Logistic(typemax(T))
 Base.typemax(::Type{Logistic{T}}) where {T<:AbstractFloat} = one(Logistic{T})
 
 Base.:<(x::Logistic, y::Logistic) = x.t < y.t
+
 Base.:<=(x::Logistic, y::Logistic) = x.t <= y.t
+
 Base.:>(x::Logistic, y::Logistic) = x.t > y.t
+
 Base.:>=(x::Logistic, y::Logistic) = x.t >= y.t
+
+Base.:(==)(x::Logistic, y::Logistic) = x.t == y.t
+
+Base.isapprox(x::Logistic, y::Logistic) = isapprox(x.t, y.t)
+
+Base.prevfloat(x::Logistic) = Logistic(prevfloat(x.t))
+
+Base.nextfloat(x::Logistic) = Logistic(nextfloat(x.t))
 
 function Base.:+(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = minmax(x.t, y.t)
@@ -77,6 +106,17 @@ function Base.:-(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	return Logistic(a + log(-expm1(b-a) / (1 + 2 * exp(b) + exp(a+b))))
 end
 
+function Base.:*(x::Logistic, y::Union{Integer, Rational})
+	a = x.t
+	y < 0 && throw(DomainError(float(x) * y, "multiplicand is negative."))
+	if y > 1
+		v = a + log(y-1)
+		v > 0 && throw(DomainError(float(x) * y, "product exceeds 1."))
+		v == 0 && return one(x)
+	end
+	return Logistic(log(y / (1 - y + exp(-a))))
+end
+Base.:*(x::Union{Integer, Rational}, y::Logistic) = y * x 
 function Base.:*(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = minmax(x.t, y.t)
 	if b <= 0 
@@ -92,21 +132,24 @@ function Base.:/(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 		DomainError(float(x) / float(y), "dividend exceeds divisor."))
 	return Logistic(b + log((1 + exp(-b)) / expm1(b-a)))
 end
+Base.:/(x::Logistic, y::Integer) = x * (1 // y)
+Base.:/(x::Logistic, y::Rational) = x * inv(y)
 
 function logexpm1(u::T) where {T<:AbstractFloat}
-	u >= log(prevfloat(T)) && return u
-	u >= sqrt(eps(T)) && return log(expm1(u))
-	return u/2 + Base.Math.@horner(u^2, log(u), 
-		+1 // 24, 
-		-1 // 2880, 
-		+1 // 181440, 
-		-1 // 9676800, 
-		+1 // 479001600, 
-		-691 // 15692092416000, 
-		+1 // 1046139494400, 
-		-3617 // 170729965486080000, 
-		+43867 // 91963695909076992000, 
-		-174611 // 16057153253965824000000)
+	u >= log(prevfloat(typemax(T))) && return u
+	return log(expm1(u))
+	# u >= sqrt(eps(T)) && return log(expm1(u))
+	# return u/2 + Base.Math.@horner(u^2, log(u), 
+		# +1 // 24, 
+		# -1 // 2880, 
+		# +1 // 181440, 
+		# -1 // 9676800, 
+		# +1 // 479001600, 
+		# -691 // 15692092416000, 
+		# +1 // 1046139494400, 
+		# -3617 // 170729965486080000, 
+		# +43867 // 91963695909076992000, 
+		# -174611 // 16057153253965824000000)
 end
 
 function Base.:^(x::Logistic{T}, k::T) where {T<:AbstractFloat}
@@ -124,7 +167,7 @@ function Base.:^(x::Logistic{T}, k::T) where {T<:AbstractFloat}
 		return Logistic(-logexpm1(u))
 	end
 end
-Base.:^(x::Logistic{T}, k::Logistic) where {T<:AbstractFloat} = x ^ T(k)
+# Base.:^(x::Logistic{T}, k::Logistic) where {T<:AbstractFloat} = x ^ T(k)
 
 Base.sqrt(x::Logistic) = x ^ (1//2)
 
