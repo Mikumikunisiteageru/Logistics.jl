@@ -28,9 +28,9 @@ Aqua.test_all(Logistics)
 end
 
 @testset "show" begin
-	@test sprint(show, Logistic(Float16(0))) === "Logistic(Float16(0.0))"
+	@test sprint(show, Logistic(Float16(0))) === "Logistic{Float16}(0.0)"
 	@test sprint(show, MIME("text/plain"), Logistic(Float16(0))) === 
-		"Logistic(Float16(0.0)) ≈ 0.5"
+		"Logistic{Float16}(0.0) ≈ 0.5"
 end
 
 @testset "conversion" begin
