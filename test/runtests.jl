@@ -246,11 +246,11 @@ end
 	@test_skip Logistic(-10000) * (10//1) === Logistic(-9997.697414907007)
 	@test_skip Logistic(-10000) * 1 === Logistic(-10000)
 	@test_skip Logistic(-10000) * 10 === Logistic(-9997.697414907007)
-	@test_skip Logistic(10000) * (1//10) === Logistic(Inf)
+	@test Logistic(10000) * (1//10) === Logistic(-2.197224577336219)
 	@test_skip Logistic(10000) * (1//1) === Logistic(10000)
-	@test_skip Logistic(10000) * (10//1)
+	@test_throws DomainError Logistic(10000) * (10//1)
 	@test_skip Logistic(10000) * 1 === Logistic(10000)
-	@test_skip Logistic(10000) * 10
+	@test_throws DomainError Logistic(10000) * 10
 	@test Logistic(10000) * logisticate(0.1) === logisticate(0.1)
 	@test Logistic(10000) * Logistic(0) === Logistic(0)
 	@test Logistic(10000) * Logistic(-Inf) === Logistic(-Inf)
@@ -268,7 +268,45 @@ end
 end
 
 @testset "division" begin
-	@test_skip TODO
+	@test_throws DomainError Logistic(0) / -1
+	@test_throws DomainError Logistic(0) / (-1//10000)
+	@test Logistic(0) / -1e4 === -5e-5
+	@test Logistic(-Inf) / -10000 == Logistic(-Inf)
+	@test_throws DomainError Logistic(0) / 0
+	@test Logistic(0) / 1 === Logistic(0)
+	@test Logistic(0) / (1//1) === Logistic(0)
+	@test Logistic(0) / 1.0 === 0.5
+	@test Logistic(0) / 2 === Logistic(-1.0986122886681098)
+	@test_skip Logistic(0) / (1//2) === Logistic(-1.0986122886681098)
+	@test_throws DomainError Logistic(0) / (1//3)
+	@test Logistic(0) / 3.0 === 0.16666666666666666
+	@test 1 \ Logistic(0) === Logistic(0)
+	@test (1//1) \ Logistic(0) === Logistic(0)
+	@test 1.0 \ Logistic(0) === 0.5
+	@test_skip Logistic(-10000) / (10//1) === Logistic(-Inf)
+	@test_skip Logistic(-10000) / (1//1) === Logistic(-10000)
+	@test_skip Logistic(-10000) / (1//10) === Logistic(-9997.697414907007)
+	@test_skip Logistic(-10000) / 1 === Logistic(-10000)
+	@test_skip Logistic(-10000) / 10 === Logistic(-Inf)
+	@test_skip Logistic(10000) / (10//1) === Logistic(Inf)
+	@test_skip Logistic(10000) / (1//1) === Logistic(10000)
+	@test_throws DomainError Logistic(10000) / (1//10)
+	@test_skip Logistic(10000) / 1 === Logistic(10000)
+	@test Logistic(10000) / 10 === Logistic(-2.197224577336219)
+	@test Logistic(0) / Logistic(0.1) === Logistic(2.9965651211176616)
+	@test_skip Logistic(0) / Logistic(10000) === Logistic(-Inf)
+	@test Logistic(-Inf) / Logistic(0) === Logistic(-Inf)
+	@test_skip Logistic(0) / Logistic(Inf) === Logistic(0)
+	@test_skip Logistic(10000) / Logistic(20000) === Logistic(-Inf)
+	@test_skip Logistic(-20000) / Logistic(-10000) === Logistic(-Inf)
+	@test Logistic(-10000) / Logistic(-10000) === Logistic(Inf)
+	@test_skip Logistic(-10000) / Logistic(+10000) === Logistic(-Inf)
+	@test Logistic(+10000) / Logistic(+10000) === Logistic(Inf)
+	@test Logistic(-30) / Logistic(-30) === Logistic(Inf)
+	@test Logistic(-30) / Logistic(+30) === Logistic(-29.999999999999908)
+	@test Logistic(+30) / Logistic(+30) === Logistic(Inf)
+	@test Logistic(0) / Logistic(0) === Logistic(Inf)
+	@test Logistic(Float16(0)) / Logistic(Float32(0)) === Logistic(Inf32)
 end
 
 @testset "logexpm1" begin
