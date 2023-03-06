@@ -10,14 +10,10 @@ struct Logistic{T<:AbstractFloat} <: Real
 end
 Logistic(t::Real) = Logistic(float(t))
 Logistic{T}(t::Real) where {T<:AbstractFloat} = Logistic(T(t))
-function Logistic(x::Logistic)
+Logistic(x::Logistic) = 
 	error("`Syntax prohibited! Use `convert(Logistic, $x)` instead.")
-	return x
-end
-function Logistic{T}(x::Logistic) where {T<:AbstractFloat}
+Logistic{T}(x::Logistic) where {T<:AbstractFloat} = 
 	error("`Syntax prohibited! Use `convert(Logistic{$T}, $x)` instead.")
-	return Logistic(T(x.t))
-end
 
 Base.show(io::IO, x::Logistic{T}) where 
 	{T<:AbstractFloat} = print(io, "Logistic{$T}($(x.t))")
