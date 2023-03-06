@@ -125,7 +125,7 @@ end
 	@test zero(Logistic{Float64}) == Logistic(-Inf)
 	@test zero(Logistic{Float32}) == Logistic(-Inf32)
 	@test zero(Logistic(1.0)) == Logistic(-Inf)
-	@test zero(Logistic(1.0f0)) == Logistic(-Inf32)
+	@test zero(Logistic(1f0)) == Logistic(-Inf32)
 end
 
 @testset "typemin" begin
@@ -139,13 +139,21 @@ end
 	@test one(Logistic{Float64}) == Logistic(+Inf)
 	@test one(Logistic{Float32}) == Logistic(+Inf32)
 	@test one(Logistic(1.0)) == Logistic(+Inf)
-	@test one(Logistic(1.0f0)) == Logistic(+Inf32)
+	@test one(Logistic(1f0)) == Logistic(+Inf32)
 end
 
 @testset "typemax" begin
 	@test_throws MethodError typemax(Logistic)
 	@test typemax(Logistic{Float64}) == Logistic(+Inf) 
 	@test typemax(Logistic(1.0)) == Logistic(+Inf) 
+end
+
+@testset "half" begin
+	@test half(Logistic) == Logistic(0)
+	@test half(Logistic{Float64}) == Logistic(0.0)
+	@test half(Logistic{Float32}) == Logistic(0f0)
+	@test half(Logistic(1.0)) == Logistic(0.0)
+	@test half(Logistic(1f0)) == Logistic(0f0)
 end
 
 @testset "comparisons" begin
@@ -199,7 +207,7 @@ end
 	@test_throws DomainError Logistic(0.0) - Logistic(0.01)
 	@test Logistic(0.0) - Logistic(-0.01) === Logistic(-5.988969771059924)
 	@test Logistic(0.0) - Logistic(-Inf) === Logistic(0.0)
-	@test_skip Logistic(+Inf) - Logistic(-Inf) === Logistic(+Inf)
+	@test Logistic(+Inf) - Logistic(-Inf) === Logistic(+Inf)
 	@test Logistic(0.0) - Logistic(0.0f0) === Logistic(-Inf)
 	@test Logistic(0.0) - BigFloat(0.5) == BigFloat(0.0)
 	@test Logistic(0.0) - BigFloat(0.5) isa BigFloat
@@ -209,8 +217,8 @@ end
 	@test Logistic(0.0) - Logistic(-10000) === Logistic(0.0)
 	@test Logistic(-9999) - Logistic(-10000) === Logistic(-9999.458675145386)
 	@test Logistic(10000) - Logistic(10000) === Logistic(-Inf)
-	@test_skip Logistic(10000) - Logistic(0) === Logistic(0.0)
-	@test_skip Logistic(10000) - Logistic(9999) === Logistic(-9999.458675145386)
+	@test Logistic(10000) - Logistic(0) === Logistic(0.0)
+	@test Logistic(10000) - Logistic(9999) === Logistic(-9999.458675145386)
 end
 
 @testset "multiplication" begin

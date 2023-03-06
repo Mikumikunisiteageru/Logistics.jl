@@ -2,7 +2,7 @@
 
 module Logistics
 
-export Logistic, logit, logistic, logisticate, complement
+export Logistic, logit, logistic, logisticate, half, complement
 
 struct Logistic{T<:AbstractFloat} <: Real
 	t::T
@@ -74,6 +74,10 @@ Base.one(::Logistic{T}) where {T<:AbstractFloat} = Logistic(typemax(T))
 
 Base.typemax(::Type{Logistic{T}}) where {T<:AbstractFloat} = one(Logistic{T})
 
+half(::Type{Logistic}) = Logistic(0)
+half(::Type{Logistic{T}}) where {T<:AbstractFloat} = Logistic(zero(T))
+half(::Logistic{T}) where {T<:AbstractFloat} = Logistic(zero(T))
+
 Base.:<(x::Logistic, y::Logistic) = x.t < y.t
 
 Base.:<=(x::Logistic, y::Logistic) = x.t <= y.t
@@ -103,7 +107,13 @@ function Base.:-(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = x.t, y.t
 	a < b && throw(
 		DomainError(float(x) - float(y), "subtrahend exceeds minuend."))
-	return Logistic(a + log(-expm1(b-a) / (1 + 2 * exp(b) + exp(a+b))))
+	if b > 0
+		return complement(y) - complement(x)
+	elseif a > 0
+		return (half(y) - y) + (half(x) - complement(x))
+	else
+		return Logistic(a + log(-expm1(b-a) / (1 + 2 * exp(b) + exp(a+b))))
+	end
 end
 
 function Base.:*(x::Logistic, y::Union{Integer, Rational})
