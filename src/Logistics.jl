@@ -129,7 +129,8 @@ end
 
 function Base.:*(x::Logistic, y::Union{Integer, Rational})
 	a = x.t
-	y < 0 && throw(DomainError(float(x) * y, "multiplicand is negative."))
+	x > 0 && y < 0 && 
+		throw(DomainError(float(x) * y, "multiplicand is negative."))
 	if y > 1
 		v = a + log(y-1)
 		v > 0 && throw(DomainError(float(x) * y, "product exceeds 1."))
@@ -137,7 +138,7 @@ function Base.:*(x::Logistic, y::Union{Integer, Rational})
 	end
 	return Logistic(log(y / (1 - y + exp(-a))))
 end
-Base.:*(x::Union{Integer, Rational}, y::Logistic) = y * x 
+Base.:*(x::Union{Integer, Rational}, y::Logistic) = y * x
 function Base.:*(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = minmax(x.t, y.t)
 	if b <= 0 

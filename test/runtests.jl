@@ -227,7 +227,44 @@ end
 end
 
 @testset "multiplication" begin
-	@test_skip TODO
+	@test_throws DomainError Logistic(0) * -1
+	@test_throws DomainError Logistic(0) * (-1//10000)
+	@test Logistic(0) * -1e-4 === -5e-5
+	@test Logistic(-Inf) * -10000 == Logistic(-Inf)
+	@test Logistic(0) * 0 === Logistic(-Inf)
+	@test Logistic(0) * 1 === Logistic(0)
+	@test Logistic(0) * (1//1) === Logistic(0)
+	@test Logistic(0) * 1.0 === 0.5
+	@test Logistic(0) * 2 === Logistic(+Inf)
+	@test_throws DomainError Logistic(0) * 3
+	@test Logistic(0) * 3.0 === 1.5
+	@test 1 * Logistic(0) === Logistic(0)
+	@test (1//1) * Logistic(0) === Logistic(0)
+	@test 1.0 * Logistic(0) === 0.5
+	@test_skip Logistic(-10000) * (1//10) === Logistic(-Inf)
+	@test_skip Logistic(-10000) * (1//1) === Logistic(-10000)
+	@test_skip Logistic(-10000) * (10//1) === Logistic(-9997.697414907007)
+	@test_skip Logistic(-10000) * 1 === Logistic(-10000)
+	@test_skip Logistic(-10000) * 10 === Logistic(-9997.697414907007)
+	@test_skip Logistic(10000) * (1//10) === Logistic(Inf)
+	@test_skip Logistic(10000) * (1//1) === Logistic(10000)
+	@test_skip Logistic(10000) * (10//1)
+	@test_skip Logistic(10000) * 1 === Logistic(10000)
+	@test_skip Logistic(10000) * 10
+	@test Logistic(10000) * logisticate(0.1) === logisticate(0.1)
+	@test Logistic(10000) * Logistic(0) === Logistic(0)
+	@test Logistic(10000) * Logistic(-Inf) === Logistic(-Inf)
+	@test Logistic(10000) * Logistic(+Inf) === Logistic(10000)
+	@test Logistic(-10000) * logisticate(0.1) === Logistic(-10002.302585092993)
+	@test Logistic(-10000) * Logistic(0) === Logistic(-10000.69314718056)
+	@test Logistic(-10000) * Logistic(-Inf) === Logistic(-Inf)
+	@test Logistic(-10000) * Logistic(+Inf) === Logistic(-10000)
+	@test Logistic(-10000) * Logistic(-10000) === Logistic(-20000)
+	@test Logistic(-10000) * Logistic(+10000) === Logistic(-10000)
+	@test Logistic(+10000) * Logistic(+10000) === Logistic(9999.30685281944)
+	@test Logistic(-30) * Logistic(-30) === Logistic(-60.000000000000185)
+	@test Logistic(0) * Logistic(0) === Logistic(-1.0986122886681098)
+	@test Logistic(0) * Logistic(0f0) === Logistic(-1.0986122886681098)
 end
 
 @testset "division" begin
