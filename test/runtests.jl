@@ -27,6 +27,12 @@ Aqua.test_all(Logistics)
 	@test_throws ErrorException Logistic{Float16}(half__)
 end
 
+@testset "show" begin
+	@test sprint(show, Logistic(Float16(0))) === "Logistic(Float16(0.0))"
+	@test sprint(show, MIME("text/plain"), Logistic(Float16(0))) === 
+		"Logistic(Float16(0.0)) ≈ 0.5"
+end
+
 @testset "conversion" begin
 	half_ = Logistic(0)
 	@test convert(Logistic, half_) === half_
@@ -277,7 +283,7 @@ end
 	@test Logistic(0) / (1//1) === Logistic(0)
 	@test Logistic(0) / 1.0 === 0.5
 	@test Logistic(0) / 2 === Logistic(-1.0986122886681098)
-	@test_skip Logistic(0) / (1//2) === Logistic(-1.0986122886681098)
+	@test Logistic(0) / (1//2) === Logistic(Inf)
 	@test_throws DomainError Logistic(0) / (1//3)
 	@test Logistic(0) / 3.0 === 0.16666666666666666
 	@test 1 \ Logistic(0) === Logistic(0)

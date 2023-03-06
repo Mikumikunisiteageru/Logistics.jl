@@ -19,6 +19,11 @@ function Logistic{T}(x::Logistic) where {T<:AbstractFloat}
 	return Logistic(T(x.t))
 end
 
+Base.show(io::IO, x::Logistic{T}) where 
+	{T<:AbstractFloat} = print(io, "Logistic($(repr(x.t)))")
+Base.show(io::IO, mime::MIME"text/plain", x::Logistic{T}) where 
+	{T<:AbstractFloat} = print(io, "Logistic($(repr(x.t))) ≈ $(float(x))")
+
 Base.convert(::Type{T}, x::Logistic) where 
 	{T<:AbstractFloat} = logistic(T(x.t))
 Base.convert(::Type{Logistic}, x::Real) = logisticate(x)
