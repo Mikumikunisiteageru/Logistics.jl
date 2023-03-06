@@ -9,14 +9,24 @@ struct Logistic{T<:AbstractFloat} <: Real
 	Logistic(t::T) where {T<:AbstractFloat} = new{T}(t)
 end
 Logistic(t::Real) = Logistic(float(t))
-Logistic(x::Logistic) = x
-Logistic{T}(x::Logistic) where {T<:AbstractFloat} = Logistic(T(x.t))
+Logistic{T}(t::Real) where {T<:AbstractFloat} = Logistic(T(t))
+function Logistic(x::Logistic)
+	error("`Syntax prohibited! Use `convert(Logistic, $x)` instead.")
+	return x
+end
+function Logistic{T}(x::Logistic) where {T<:AbstractFloat}
+	error("`Syntax prohibited! Use `convert(Logistic{$T}, $x)` instead.")
+	return Logistic(T(x.t))
+end
 
 Base.convert(::Type{T}, x::Logistic) where 
 	{T<:AbstractFloat} = logistic(T(x.t))
-Base.convert(::Type{Logistic}, x::AbstractFloat) = logisticate(x)
-Base.convert(::Type{Logistic{T}}, x::AbstractFloat) where 
+Base.convert(::Type{Logistic}, x::Real) = logisticate(x)
+Base.convert(::Type{Logistic{T}}, x::Real) where 
 	{T<:AbstractFloat} = logisticate(T, x)
+Base.convert(::Type{Logistic}, x::Logistic) = x
+Base.convert(::Type{Logistic{T}}, x::Logistic) where 
+	{T<:AbstractFloat} = Logistic(T(x.t))
 
 (::Type{T})(x::Logistic) where {T<:AbstractFloat} = convert(T, x)
 
@@ -24,7 +34,7 @@ Base.promote_rule(::Type{Logistic{T1}}, ::Type{Logistic{T2}}) where
 	{T1<:AbstractFloat, T2<:AbstractFloat} = Logistic{promote_type(T1, T2)}
 Base.promote_rule(::Type{Logistic}, ::Type{T}) where 
 	{T<:AbstractFloat} = T
-Base.promote_rule(::Type{Logistic}, ::Type{Logistic{T}}) where 
+Base.promote_rule(::Type{Logistic{T}}, ::Type{Logistic}) where 
 	{T<:AbstractFloat} = Logistic{T}
 Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where 
 	{T1<:AbstractFloat, T2<:AbstractFloat} = promote_type(T1, T2)

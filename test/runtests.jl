@@ -14,38 +14,43 @@ Aqua.test_all(Logistics)
 	@test Logistic{BigFloat} <: Logistic
 	@test_throws TypeError Logistic{Int64}
 	@test_throws TypeError Logistic{Real}
-	half = Logistic(0)
-	@test half isa Logistic{Float64}
-	@test Logistic(half) == half
-	@test Logistic(half) === half
-	@test Logistic{Float16}(half) == Logistic(Float16(0))
-	@test Logistic{Float16}(half) == Logistic(Float32(0))
-	@test Logistic{Float16}(half) === Logistic(Float16(0))
-	@test Logistic{Float16}(half) !== Logistic(Float32(0))
+	@test Logistic(0) === Logistic(0.0)
+	@test Logistic{Float64}(0) === Logistic(0.0)
+	@test Logistic{Float32}(0) === Logistic(0f0)
+	half__ = Logistic(0)
+	@test half__ isa Logistic{Float64}
+	@test_throws ErrorException Logistic(half__)
+	@test_throws ErrorException Logistic(half__)
+	@test_throws ErrorException Logistic{Float16}(half__)
+	@test_throws ErrorException Logistic{Float16}(half__)
+	@test_throws ErrorException Logistic{Float16}(half__)
+	@test_throws ErrorException Logistic{Float16}(half__)
 end
 
 @testset "conversion" begin
-	half = Logistic(0)
-	@test convert(Logistic, half) === half
-	@test convert(Logistic{Float16}, half) === Logistic(Float16(0))
-	@test convert(Logistic, 0.5) === half
+	half_ = Logistic(0)
+	@test convert(Logistic, half_) === half_
+	@test convert(Logistic{Float16}, half_) === Logistic(Float16(0))
+	@test convert(Logistic, 0.5) === half_
 	@test convert(Logistic{Float16}, 0.5) === Logistic(Float16(0))
-	@test convert(Float16, half) === Float16(0.5)
-	@test convert(AbstractFloat, half) === Float64(0.5)
-	@test convert(Real, half) === half
-	@test_throws MethodError convert(Rational{Int}, half)
-	@test Float16(half) === Float16(0.5)
-	@test AbstractFloat(half) === Float64(0.5)
-	@test Real(half) === half
-	@test_throws MethodError Rational{Int}(half)
-	@test float(half) === 0.5
+	@test convert(Float16, half_) === Float16(0.5)
+	@test convert(AbstractFloat, half_) === Float64(0.5)
+	@test convert(Real, half_) === half_
+	@test_throws MethodError convert(Rational{Int}, half_)
+	@test Float16(half_) === Float16(0.5)
+	@test AbstractFloat(half_) === Float64(0.5)
+	@test Real(half_) === half_
+	@test_throws MethodError Rational{Int}(half_)
+	@test float(half_) === 0.5
 	@test float(Logistic(-50)) === 1.928749847963918e-22
 	@test float(Logistic(+50)) === 1.0
+	@test convert(Logistic, Logistic(-10000)) === Logistic(-10000)
+	@test convert(Logistic{Float64}, Logistic(-10000)) === Logistic(-10000)
 end
 
 @testset "promotion" begin
 	@test promote_type(Logistic, Logistic) == Logistic
-	@test_broken promote_type(Logistic, Logistic{Float64}) == Logistic{Float64}
+	@test promote_type(Logistic, Logistic{Float64}) == Logistic{Float64}
 	@test promote_type(Logistic{Float64}, Logistic{Float64}) == 
 		Logistic{Float64}
 	@test promote_type(Logistic{Float32}, Logistic{Float64}) == 
