@@ -159,18 +159,6 @@ Base.:/(x::Logistic, y::Rational) = x * inv(y)
 function logexpm1(u::T) where {T<:AbstractFloat}
 	u >= log(prevfloat(typemax(T))) && return u
 	return log(expm1(u))
-	# u >= sqrt(eps(T)) && return log(expm1(u))
-	# return u/2 + Base.Math.@horner(u^2, log(u), 
-		# +1 // 24, 
-		# -1 // 2880, 
-		# +1 // 181440, 
-		# -1 // 9676800, 
-		# +1 // 479001600, 
-		# -691 // 15692092416000, 
-		# +1 // 1046139494400, 
-		# -3617 // 170729965486080000, 
-		# +43867 // 91963695909076992000, 
-		# -174611 // 16057153253965824000000)
 end
 
 function Base.:^(x::Logistic{T}, k::T) where {T<:AbstractFloat}
@@ -188,7 +176,6 @@ function Base.:^(x::Logistic{T}, k::T) where {T<:AbstractFloat}
 		return Logistic(-logexpm1(u))
 	end
 end
-# Base.:^(x::Logistic{T}, k::Logistic) where {T<:AbstractFloat} = x ^ T(k)
 
 Base.sqrt(x::Logistic) = x ^ (1//2)
 

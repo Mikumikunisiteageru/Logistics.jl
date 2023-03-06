@@ -248,7 +248,19 @@ end
 end
 
 @testset "exponentials" begin
-	@test_skip TODO
+	@test_throws DomainError Logistic(0) ^ -0.0001
+	@test Logistic(0) ^ 0 === Logistic(Inf)
+	@test Logistic(0) ^ 1 === Logistic(0)
+	@test Logistic(0) ^ 1e-4 === Logistic(9.57681863499863)
+	@test Logistic(0) ^ 1e+4 === Logistic(-6931.471805599453)
+	@test Logistic(9.57681863499863) ^ 1e+4 === Logistic(6.661338147750941e-16)
+	@test Logistic(-6931.471805599453) ^ 1e-4 === Logistic(0)
+	@test Logistic(60) ^ 1e+30 === Logistic(-8756.51076269652)
+	@test Logistic(-10000) ^ 1e-30 === Logistic(59.86721241784519)
+	@test Logistic(59.86721241784519) ^ 1e+30 === Logistic(-9999.999999999998)
+	@test Logistic(-8756.51076269652) ^ 1e-30 === Logistic(60)
+	@test Logistic(0f0) ^ 0 === Logistic(Inf32)
+	@test_throws ErrorException Logistic(0) ^ Logistic(0)
 end
 
 @testset "sqrt" begin
