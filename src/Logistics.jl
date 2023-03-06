@@ -100,6 +100,7 @@ function Base.:+(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	s > 0 && throw(
 		DomainError(float(x) + float(y), "sum of the logistics exceeds 1."))
 	s == 0 && return Logistic(typemax(T))
+	a == -Inf && return Logistic(b)
 	return Logistic(b + log((2 * exp(a) + exp(a-b) + 1) / -expm1(s)))
 end
 

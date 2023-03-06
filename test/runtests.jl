@@ -192,7 +192,7 @@ end
 	@test_throws DomainError Logistic(0.0) + Logistic(0.01)
 	@test Logistic(0.0) + Logistic(-0.01) === Logistic(5.988969771059924)
 	@test Logistic(0.0) + Logistic(-Inf) === Logistic(0.0)
-	@test_broken Logistic(+Inf) + Logistic(-Inf) === Logistic(+Inf)
+	@test Logistic(+Inf) + Logistic(-Inf) === Logistic(+Inf)
 	@test Logistic(0.0) + Logistic(0.0f0) === Logistic(+Inf)
 	@test Logistic(0.0) + BigFloat(0.5) == BigFloat(1.0)
 	@test Logistic(0.0) + BigFloat(0.5) isa BigFloat
