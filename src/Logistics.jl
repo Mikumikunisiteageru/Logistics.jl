@@ -46,12 +46,6 @@ Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where
 	{T1<:AbstractFloat, T2<:AbstractFloat} = promote_type(T1, T2)
 Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where 
 	{T1<:AbstractFloat, T2<:Real} = T1
-Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where 
-	{T1<:AbstractFloat, T2<:AbstractIrrational} = T1
-Base.promote_rule(::Type{Logistic{T}}, ::Type{BigFloat}) where 
-	{T<:AbstractFloat} = BigFloat
-Base.promote_rule(::Type{Logistic{T}}, ::Type{Bool}) where 
-	{T<:AbstractFloat} = T
 
 function logit(x::Real)
 	0 <= x <= 1 && return log(x / (1 - x))
