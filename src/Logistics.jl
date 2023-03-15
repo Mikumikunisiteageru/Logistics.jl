@@ -9,6 +9,15 @@ end Logistics
 
 export Logistic, logit, logistic, logisticate, half, complement
 
+"""
+	Logistic{T<:AbstractFloat} <: Real
+
+	Logistic(t::Real)
+	Logistic{T}(t::Real) where {T<:AbstractFloat}
+
+A type representing real numbers in ``[0,1]`` (e.g. probabilities) by their 
+logit values.
+"""
 struct Logistic{T<:AbstractFloat} <: Real
 	t::T
 	Logistic(t::T) where {T<:AbstractFloat} = new{T}(t)
