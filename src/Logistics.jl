@@ -1,6 +1,11 @@
 # src/Logistics.jl
 
 module Logistics
+@doc let
+    path = joinpath(dirname(@__DIR__), "README.md")
+    include_dependency(path)
+    read(path, String)
+end Logistics
 
 export Logistic, logit, logistic, logisticate, half, complement
 
@@ -65,12 +70,50 @@ function Base.log(x::Logistic)
 	end
 end
 
+"""
+	logisticate(x::Real) :: Logistic
+	logisticate(T::Type{<:AbstractFloat}, x::Real) :: Logistic{T}
+	logisticate(::Type{Logistic}, x::Real) :: Logistic
+	logisticate(::Type{<:Logistic{T}}, x::Real) 
+		where {T<:AbstractFloat} :: Logistic{T}
+
+Convert a `Real` number to its equivalent `Logistic` number.
+
+# Examples
+```jldoctest
+julia> logisticate(0.39)
+Logistic{Float64}(-0.4473122180436648) ≈ 0.39
+
+julia> logisticate(Float32, 0.39)
+Logistic{Float32}(-0.4473123) ≈ 0.39
+
+julia> logisticate(Logistic, 0.39)
+Logistic{Float64}(-0.4473122180436648) ≈ 0.39
+
+julia> logisticate(Logistic{Float32}, 0.39)
+Logistic{Float32}(-0.4473123) ≈ 0.39
+```
+"""
 logisticate(x::Real) = Logistic(logit(x))
 logisticate(T::Type{<:AbstractFloat}, x::Real) = logisticate(T(x))
 logisticate(::Type{Logistic}, x::Real) = Logistic(logit(x))
 logisticate(::Type{<:Logistic{T}}, x::Real) where 
 	{T<:AbstractFloat} = logisticate(T(x))
 
+"""
+	complement(x::Logistic) :: Logistic
+
+Compute the complement, i.e., the different between one and the argument.
+
+# Examples
+```jldoctest
+julia> complement(logisticate(0.2))
+Logistic{Float64}(1.3862943611198906) ≈ 0.8
+
+julia> 1 - logisticate(0.2)
+0.8
+```
+"""
 complement(x::Logistic) = Logistic(-x.t)
 
 Base.zero(::Type{Logistic}) = Logistic(-Inf)
@@ -85,6 +128,22 @@ Base.one(::Logistic{T}) where {T<:AbstractFloat} = Logistic(typemax(T))
 
 Base.typemax(::Type{Logistic{T}}) where {T<:AbstractFloat} = one(Logistic{T})
 
+"""
+	half(::Type{Logistic}) :: Logistic
+	half(::Type{Logistic{T}}) where {T<:AbstractFloat} :: Logistic{T}
+	half(::Logistic{T}) where {T<:AbstractFloat} :: Logistic{T}
+
+Return a `Logistic` number equal to a half.
+
+# Examples
+```jldoctest
+julia> (logisticate(0) + logisticate(1)) / 2
+Logistic{Float64}(0.0) ≈ 0.5
+
+julia> half(Logistic{Float64})
+Logistic{Float64}(0.0) ≈ 0.5
+```
+"""
 half(::Type{Logistic}) = Logistic(0)
 half(::Type{Logistic{T}}) where {T<:AbstractFloat} = Logistic(zero(T))
 half(::Logistic{T}) where {T<:AbstractFloat} = Logistic(zero(T))
