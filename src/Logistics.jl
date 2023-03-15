@@ -7,7 +7,7 @@ module Logistics
     read(path, String)
 end Logistics
 
-export Logistic, logit, logistic, logisticate, half, complement
+export Logistic, logit, logistic, logisticate, complement, half
 
 """
 	Logistic{T<:AbstractFloat} <: Real
@@ -56,12 +56,23 @@ Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where
 Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where 
 	{T1<:AbstractFloat, T2<:Real} = T1
 
+"""
+	logit(x::Real)
+	logit(x::Logistic)
+
+Compute ``\\operatorname{logit}(x) := \\log(x / (1-x))``.
+"""
 function logit(x::Real)
 	0 <= x <= 1 && return log(x / (1 - x))
 	throw(DomainError(x, "logit only accepts real argument between 0 and 1."))
 end
 logit(x::Logistic) = x.t
 
+"""
+	logistic(t::Real)
+
+Compute ``\\operatorname{logistic}(x) := 1 / (1 + \\exp(x))``.
+"""
 logistic(t::Real) = 1 / (1 + exp(-t))
 
 function Base.log(x::Logistic)
