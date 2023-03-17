@@ -178,6 +178,12 @@ Base.prevfloat(x::Logistic) = Logistic(prevfloat(x.t))
 
 Base.nextfloat(x::Logistic) = Logistic(nextfloat(x.t))
 
+function Base.eps(x::Logistic)
+	iszero(x) && return nextfloat(x) - x
+	isone(x) && return x - prevfloat(x)
+	return max(nextfloat(x) - x, x - prevfloat(x))
+end
+
 function Base.:+(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = minmax(x.t, y.t)
 	s = a + b

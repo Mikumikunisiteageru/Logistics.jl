@@ -198,6 +198,12 @@ end
 	@test nextfloat(Logistic(+Inf)) == Logistic(+Inf)
 end
 
+@testset "eps" begin
+	@test eps(Logistic(-Inf)) == Logistic(-1.7976931348623157e308)
+	@test eps(Logistic(0.0)) == Logistic(-Inf)
+	@test eps(Logistic(+Inf)) == Logistic(-1.7976931348623157e308)
+end
+
 @testset "addition" begin
 	@test Logistic(0.0) + Logistic(0.0) === Logistic(Inf)
 	@test_throws DomainError Logistic(0.0) + Logistic(0.01)
