@@ -232,7 +232,12 @@ function Base.:/(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = x.t, y.t
 	a > b && throw(
 		DomainError(float(x) / float(y), "dividend exceeds divisor."))
-	return Logistic(b + log((1 + exp(-b)) / expm1(b-a)))
+	a == b && return Logistic(typemax(T))
+	if b <= 0
+		return Logistic(a - b + log((1+exp(b)) / -expm1(a-b)))
+	else
+		return Logistic(a + log((1+exp(-b)) / -expm1(a-b)))
+	end
 end
 Base.:/(x::Logistic, y::Integer) = x * (1 // y)
 Base.:/(x::Logistic, y::Rational) = x * inv(y)
