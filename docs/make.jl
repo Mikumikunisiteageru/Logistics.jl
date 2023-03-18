@@ -9,7 +9,6 @@ makedocs(
 	pages = [
 		"Logistics.jl" => "index.md",
 		],
-	modules = [Logistics],
 )
 
 deploydocs(

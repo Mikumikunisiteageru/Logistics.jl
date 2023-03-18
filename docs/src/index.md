@@ -4,13 +4,23 @@
 Logistics
 ```
 
-## New type and functions
+## The new type `Logistic`
 
 ```@docs
 Logistic
-logit
-logistic
+```
+
+## New functions
+
+```@docs
 logisticate
 complement
 half
+```
+
+## Functions from LogExpFunctions.jl
+
+```@docs
+logit
+logistic
 ```
