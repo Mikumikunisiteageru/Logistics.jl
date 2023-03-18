@@ -1,11 +1,6 @@
 # src/Logistics.jl
 
 module Logistics
-@doc let
-    path = joinpath(dirname(@__DIR__), "README.md")
-    include_dependency(path)
-    read(path, String)
-end Logistics
 
 import LogExpFunctions: logit, logistic, log1pexp, logexpm1
 
