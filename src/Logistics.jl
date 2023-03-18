@@ -95,7 +95,7 @@ logisticate(::Type{<:Logistic{T}}, x::Real) where
 """
 	complement(x::Logistic) :: Logistic
 
-Compute the complement, i.e., the different between one and the argument.
+Compute the complement, i.e., the difference between one and the argument.
 
 # Examples
 ```jldoctest
