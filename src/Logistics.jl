@@ -7,6 +7,8 @@ module Logistics
     read(path, String)
 end Logistics
 
+import LogExpFunctions: logit, logistic, log1pexp, logexpm1
+
 export Logistic, logit, logistic, logisticate, complement, half
 
 """
@@ -56,33 +58,9 @@ Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where
 Base.promote_rule(::Type{Logistic{T1}}, ::Type{T2}) where 
 	{T1<:AbstractFloat, T2<:Real} = T1
 
-"""
-	logit(x::Real)
-	logit(x::Logistic)
-
-Compute ``\\operatorname{logit}(x) := \\log(x / (1-x))``.
-"""
-function logit(x::Real)
-	0 <= x <= 1 && return log(x / (1 - x))
-	throw(DomainError(x, "logit only accepts real argument between 0 and 1."))
-end
 logit(x::Logistic) = x.t
 
-"""
-	logistic(t::Real)
-
-Compute ``\\operatorname{logistic}(x) := 1 / (1 + \\exp(x))``.
-"""
-logistic(t::Real) = 1 / (1 + exp(-t))
-
-function Base.log(x::Logistic)
-	u = exp(-x.t)
-	if u == u + 1
-		return x.t
-	else
-		return -log1p(u)
-	end
-end
+Base.log(x::Logistic) = -log1pexp(-x.t)
 
 """
 	logisticate(x::Real) :: Logistic
@@ -241,11 +219,6 @@ function Base.:/(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 end
 Base.:/(x::Logistic, y::Integer) = x * (1 // y)
 Base.:/(x::Logistic, y::Rational) = x * inv(y)
-
-function logexpm1(u::T) where {T<:AbstractFloat}
-	u >= log(prevfloat(typemax(T))) && return u
-	return log(expm1(u))
-end
 
 function Base.:^(x::Logistic{T}, k::T) where {T<:AbstractFloat}
 	k < 0 && throw(DomainError(float(x) ^ k, "exponent is negative."))

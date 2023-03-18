@@ -48,7 +48,7 @@ end
 	@test Real(half_) === half_
 	@test_throws MethodError Rational{Int}(half_)
 	@test float(half_) === 0.5
-	@test float(Logistic(-50)) === 1.928749847963918e-22
+	@test float(Logistic(-50)) === 1.9287498479639178e-22
 	@test float(Logistic(+50)) === 1.0
 	@test convert(Logistic, Logistic(-10000)) === Logistic(-10000)
 	@test convert(Logistic{Float64}, Logistic(-10000)) === Logistic(-10000)

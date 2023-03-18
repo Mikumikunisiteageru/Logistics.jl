@@ -3,8 +3,12 @@ uuid = "e933307e-f964-4372-9340-e36d39c2f667"
 authors = ["Yu-Chang YANG <yang.yc.allium@gmail.com>"]
 version = "0.1.0"
 
+[deps]
+LogExpFunctions = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
+
 [compat]
 Aqua = "0.6"
+LogExpFunctions = "0.3"
 julia = "1.0"
 
 [extras]
