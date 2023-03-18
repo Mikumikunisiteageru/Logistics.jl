@@ -1,7 +1,7 @@
 # Logistics.jl
 
-[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://Mikumikunisiteageru.github.io/Logistics.jl/stable)
-[![](https://img.shields.io/badge/docs-dev-blue.svg)](https://Mikumikunisiteageru.github.io/Logistics.jl/dev)
+[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://Mikumikunisiteageru.github.io/Logistics.jl/stable)
+[![Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://Mikumikunisiteageru.github.io/Logistics.jl/dev)
 [![CI](https://github.com/Mikumikunisiteageru/Logistics.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/Mikumikunisiteageru/Logistics.jl/actions/workflows/CI.yml)
 [![Codecov](https://codecov.io/gh/Mikumikunisiteageru/Logistics.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/Mikumikunisiteageru/Logistics.jl)
 [![Aqua.jl Quality Assurance](https://img.shields.io/badge/Aquajl-%F0%9F%8C%A2-aqua.svg)](https://github.com/JuliaTesting/Aqua.jl)
