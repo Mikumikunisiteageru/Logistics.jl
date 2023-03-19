@@ -4,7 +4,7 @@ using Logistics
 using Test
 import Aqua
 
-Aqua.test_all(Logistics)
+Aqua.test_all(Logistics, ambiguities = VERSION >= v"1.6")
 
 @testset "type" begin
 	@test Logistic <: Real
