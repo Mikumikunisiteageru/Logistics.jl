@@ -269,6 +269,8 @@ end
 	@test trunc(Bool, Logistic(nextfloat(0.0)))  === false
 	@test trunc(Bool, Logistic(prevfloat(+Inf))) === false
 	@test trunc(Bool, Logistic(+Inf))            === true
+	@test trunc(Logistic(NaN)) === Logistic(NaN)
+	@test_throws InexactError trunc(Int, Logistic(NaN))
 end
 
 @testset "floor" begin
@@ -293,6 +295,8 @@ end
 	@test floor(Bool, Logistic(nextfloat(0.0)))  === false
 	@test floor(Bool, Logistic(prevfloat(+Inf))) === false
 	@test floor(Bool, Logistic(+Inf))            === true
+	@test floor(Logistic(NaN)) === Logistic(NaN)
+	@test_throws InexactError floor(Int, Logistic(NaN))
 end
 
 @testset "ceil" begin
@@ -317,6 +321,8 @@ end
 	@test ceil(Bool, Logistic(nextfloat(0.0)))  === true
 	@test ceil(Bool, Logistic(prevfloat(+Inf))) === true
 	@test ceil(Bool, Logistic(+Inf))            === true
+	@test ceil(Logistic(NaN)) === Logistic(NaN)
+	@test_throws InexactError ceil(Int, Logistic(NaN))
 end
 
 @testset "round" begin
@@ -341,6 +347,8 @@ end
 	@test round(Bool, Logistic(nextfloat(0.0)))  === true
 	@test round(Bool, Logistic(prevfloat(+Inf))) === true
 	@test round(Bool, Logistic(+Inf))            === true
+	@test round(Logistic(NaN)) === Logistic(NaN)
+	@test_throws InexactError round(Int, Logistic(NaN))
 end
 
 @testset "addition" begin
