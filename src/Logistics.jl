@@ -168,22 +168,15 @@ half(::Type{Logistic{T}}) where {T<:AbstractFloat} = Logistic(zero(T))
 half(::Logistic{T}) where {T<:AbstractFloat} = Logistic(zero(T))
 
 Base.:<(x::Logistic, y::Logistic) = x.t < y.t
-
 Base.:<=(x::Logistic, y::Logistic) = x.t <= y.t
-
 Base.:>(x::Logistic, y::Logistic) = x.t > y.t
-
 Base.:>=(x::Logistic, y::Logistic) = x.t >= y.t
-
 Base.:(==)(x::Logistic, y::Logistic) = x.t == y.t
-
 Base.isequal(x::Logistic, y::Logistic) = isequal(x.t, y.t)
-
 Base.isapprox(x::Logistic, y::Logistic) = isapprox(x.t, y.t)
 
 Base.prevfloat(x::Logistic, d::Integer) = Logistic(prevfloat(x.t, d))
 Base.prevfloat(x::Logistic) = Logistic(prevfloat(x.t))
-
 Base.nextfloat(x::Logistic, d::Integer) = Logistic(nextfloat(x.t, d))
 Base.nextfloat(x::Logistic) = Logistic(nextfloat(x.t))
 
@@ -194,24 +187,20 @@ function Base.eps(x::Logistic)
 end
 
 Base.isinf(::Logistic) = false
-
 Base.isfinite(x::Logistic) = !isnan(x.t)
-
 Base.isnan(x::Logistic) = isnan(x.t)
 
 const HASHLOGISTICS = hash("Logistics")
-
 Base.hash(x::Logistic, h::UInt64) = xor(hash(x.t, h), HASHLOGISTICS)
 
 Base.abs(x::Logistic) = x
-
 Base.sign(x::Logistic) = ceil(x)
 
-Base.round(x::Logistic, r::RoundingMode{:ToZero})  = 
+Base.round(x::Logistic, r::RoundingMode{:ToZero}) = 
 	isnan(x) ? x : x.t < +Inf ? zero(x) : one(x)
-Base.round(x::Logistic, r::RoundingMode{:Down})    = 
+Base.round(x::Logistic, r::RoundingMode{:Down}) = 
 	isnan(x) ? x : x.t < +Inf ? zero(x) : one(x)
-Base.round(x::Logistic, r::RoundingMode{:Up})      = 
+Base.round(x::Logistic, r::RoundingMode{:Up}) = 
 	isnan(x) ? x : x.t <= -Inf ? zero(x) : one(x)
 Base.round(x::Logistic, r::RoundingMode{:Nearest}) = 
 	isnan(x) ? x : x.t <= 0 ? zero(x) : one(x)
@@ -304,7 +293,6 @@ function Base.:^(x::Logistic{T}, k::T) where {T<:AbstractFloat}
 end
 
 Base.sqrt(x::Logistic) = x ^ (1//2)
-
 Base.cbrt(x::Logistic) = x ^ (1//3)
 
 end # module Logistics
