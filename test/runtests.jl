@@ -190,12 +190,18 @@ end
 	@test prevfloat(Logistic(-Inf)) == Logistic(-Inf)
 	@test prevfloat(Logistic(0.0)) == Logistic(-5.0e-324)
 	@test prevfloat(Logistic(+Inf)) == Logistic(1.7976931348623157e308)
+	@test prevfloat(Logistic(-Inf), 10) == Logistic(-Inf)
+	@test prevfloat(Logistic(0.0), 10) == Logistic(-5.0e-323)
+	@test prevfloat(Logistic(+Inf), 10) == Logistic(1.797693134862314e308)
 end
 
 @testset "nextfloat" begin
 	@test nextfloat(Logistic(-Inf)) == Logistic(-1.7976931348623157e308)
 	@test nextfloat(Logistic(0.0)) == Logistic(5.0e-324)
 	@test nextfloat(Logistic(+Inf)) == Logistic(+Inf)
+	@test nextfloat(Logistic(-Inf), 10) == Logistic(-1.797693134862314e308)
+	@test nextfloat(Logistic(0.0), 10) == Logistic(5.0e-323)
+	@test nextfloat(Logistic(+Inf), 10) == Logistic(+Inf)
 end
 
 @testset "eps" begin

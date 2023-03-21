@@ -158,8 +158,10 @@ Base.:(==)(x::Logistic, y::Logistic) = x.t == y.t
 
 Base.isapprox(x::Logistic, y::Logistic) = isapprox(x.t, y.t)
 
+Base.prevfloat(x::Logistic, d::Integer) = Logistic(prevfloat(x.t, d))
 Base.prevfloat(x::Logistic) = Logistic(prevfloat(x.t))
 
+Base.nextfloat(x::Logistic, d::Integer) = Logistic(nextfloat(x.t, d))
 Base.nextfloat(x::Logistic) = Logistic(nextfloat(x.t))
 
 function Base.eps(x::Logistic)
