@@ -182,6 +182,8 @@ Base.hash(x::Logistic, h::UInt64) = xor(hash(x.t, h), HASHLOGISTICS)
 
 Base.abs(x::Logistic) = x
 
+Base.sign(x::Logistic) = ceil(x)
+
 Base.round(x::Logistic, r::RoundingMode{:ToZero})  = 
 	isnan(x) ? x : x.t < +Inf ? zero(x) : one(x)
 Base.round(x::Logistic, r::RoundingMode{:Down})    = 

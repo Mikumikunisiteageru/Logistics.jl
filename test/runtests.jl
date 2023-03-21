@@ -247,6 +247,13 @@ end
 	@test abs(Logistic(NaN)) === Logistic(NaN)
 end
 
+@testset "sign" begin
+	@test sign(Logistic(-Inf)) === Logistic(-Inf)
+	@test sign(Logistic(0.0)) === Logistic(+Inf)
+	@test sign(Logistic(+Inf)) === Logistic(+Inf)
+	@test sign(Logistic(NaN)) === Logistic(NaN)
+end
+
 @testset "trunc" begin
 	@test trunc(Logistic(-Inf))            === Logistic(-Inf)
 	@test trunc(Logistic(nextfloat(-Inf))) === Logistic(-Inf)
