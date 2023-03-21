@@ -156,7 +156,7 @@ Base.:>=(x::Logistic, y::Logistic) = x.t >= y.t
 
 Base.:(==)(x::Logistic, y::Logistic) = x.t == y.t
 
-Base.:(===)(x::Logistic, y::Logistic) = x.t === y.t
+Base.isequal(x::Logistic, y::Logistic) = x.t === y.t
 
 Base.isapprox(x::Logistic, y::Logistic) = isapprox(x.t, y.t)
 
