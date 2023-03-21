@@ -182,6 +182,19 @@ Base.hash(x::Logistic, h::UInt64) = xor(hash(x.t, h), HASHLOGISTICS)
 
 Base.abs(x::Logistic) = x
 
+Base.round(x::Logistic, r::RoundingMode{:ToZero})  = 
+	x.t < +Inf ? zero(x) : one(x)
+Base.round(x::Logistic, r::RoundingMode{:Down})    = 
+	x.t < +Inf ? zero(x) : one(x)
+Base.round(x::Logistic, r::RoundingMode{:Up})      = 
+	x.t <= -Inf ? zero(x) : one(x)
+Base.round(x::Logistic, r::RoundingMode{:Nearest}) = 
+	x.t <= 0 ? zero(x) : one(x)
+Base.trunc(::Type{T}, x::Logistic) where {T<:Integer} = T(x.t >= +Inf)
+Base.floor(::Type{T}, x::Logistic) where {T<:Integer} = T(x.t >= +Inf)
+Base.ceil(::Type{T}, x::Logistic) where {T<:Integer} = T(x.t > -Inf)
+Base.round(::Type{T}, x::Logistic) where {T<:Integer} = T(x.t > 0)
+
 function Base.:+(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = minmax(x.t, y.t)
 	s = a + b

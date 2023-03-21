@@ -247,6 +247,102 @@ end
 	@test abs(Logistic(NaN)) === Logistic(NaN)
 end
 
+@testset "trunc" begin
+	@test trunc(Logistic(-Inf))            === Logistic(-Inf)
+	@test trunc(Logistic(nextfloat(-Inf))) === Logistic(-Inf)
+	@test trunc(Logistic(prevfloat(0.0)))  === Logistic(-Inf)
+	@test trunc(Logistic(0.0))             === Logistic(-Inf)
+	@test trunc(Logistic(nextfloat(0.0)))  === Logistic(-Inf)
+	@test trunc(Logistic(prevfloat(+Inf))) === Logistic(-Inf)
+	@test trunc(Logistic(+Inf))            === Logistic(+Inf)
+	@test trunc(Int, Logistic(-Inf))            === 0
+	@test trunc(Int, Logistic(nextfloat(-Inf))) === 0
+	@test trunc(Int, Logistic(prevfloat(0.0)))  === 0
+	@test trunc(Int, Logistic(0.0))             === 0
+	@test trunc(Int, Logistic(nextfloat(0.0)))  === 0
+	@test trunc(Int, Logistic(prevfloat(+Inf))) === 0
+	@test trunc(Int, Logistic(+Inf))            === 1
+	@test trunc(Bool, Logistic(-Inf))            === false
+	@test trunc(Bool, Logistic(nextfloat(-Inf))) === false
+	@test trunc(Bool, Logistic(prevfloat(0.0)))  === false
+	@test trunc(Bool, Logistic(0.0))             === false
+	@test trunc(Bool, Logistic(nextfloat(0.0)))  === false
+	@test trunc(Bool, Logistic(prevfloat(+Inf))) === false
+	@test trunc(Bool, Logistic(+Inf))            === true
+end
+
+@testset "floor" begin
+	@test floor(Logistic(-Inf))            === Logistic(-Inf)
+	@test floor(Logistic(nextfloat(-Inf))) === Logistic(-Inf)
+	@test floor(Logistic(prevfloat(0.0)))  === Logistic(-Inf)
+	@test floor(Logistic(0.0))             === Logistic(-Inf)
+	@test floor(Logistic(nextfloat(0.0)))  === Logistic(-Inf)
+	@test floor(Logistic(prevfloat(+Inf))) === Logistic(-Inf)
+	@test floor(Logistic(+Inf))            === Logistic(+Inf)
+	@test floor(Int, Logistic(-Inf))            === 0
+	@test floor(Int, Logistic(nextfloat(-Inf))) === 0
+	@test floor(Int, Logistic(prevfloat(0.0)))  === 0
+	@test floor(Int, Logistic(0.0))             === 0
+	@test floor(Int, Logistic(nextfloat(0.0)))  === 0
+	@test floor(Int, Logistic(prevfloat(+Inf))) === 0
+	@test floor(Int, Logistic(+Inf))            === 1
+	@test floor(Bool, Logistic(-Inf))            === false
+	@test floor(Bool, Logistic(nextfloat(-Inf))) === false
+	@test floor(Bool, Logistic(prevfloat(0.0)))  === false
+	@test floor(Bool, Logistic(0.0))             === false
+	@test floor(Bool, Logistic(nextfloat(0.0)))  === false
+	@test floor(Bool, Logistic(prevfloat(+Inf))) === false
+	@test floor(Bool, Logistic(+Inf))            === true
+end
+
+@testset "ceil" begin
+	@test ceil(Logistic(-Inf))            === Logistic(-Inf)
+	@test ceil(Logistic(nextfloat(-Inf))) === Logistic(+Inf)
+	@test ceil(Logistic(prevfloat(0.0)))  === Logistic(+Inf)
+	@test ceil(Logistic(0.0))             === Logistic(+Inf)
+	@test ceil(Logistic(nextfloat(0.0)))  === Logistic(+Inf)
+	@test ceil(Logistic(prevfloat(+Inf))) === Logistic(+Inf)
+	@test ceil(Logistic(+Inf))            === Logistic(+Inf)
+	@test ceil(Int, Logistic(-Inf))            === 0
+	@test ceil(Int, Logistic(nextfloat(-Inf))) === 1
+	@test ceil(Int, Logistic(prevfloat(0.0)))  === 1
+	@test ceil(Int, Logistic(0.0))             === 1
+	@test ceil(Int, Logistic(nextfloat(0.0)))  === 1
+	@test ceil(Int, Logistic(prevfloat(+Inf))) === 1
+	@test ceil(Int, Logistic(+Inf))            === 1
+	@test ceil(Bool, Logistic(-Inf))            === false
+	@test ceil(Bool, Logistic(nextfloat(-Inf))) === true
+	@test ceil(Bool, Logistic(prevfloat(0.0)))  === true
+	@test ceil(Bool, Logistic(0.0))             === true
+	@test ceil(Bool, Logistic(nextfloat(0.0)))  === true
+	@test ceil(Bool, Logistic(prevfloat(+Inf))) === true
+	@test ceil(Bool, Logistic(+Inf))            === true
+end
+
+@testset "round" begin
+	@test round(Logistic(-Inf))            === Logistic(-Inf)
+	@test round(Logistic(nextfloat(-Inf))) === Logistic(-Inf)
+	@test round(Logistic(prevfloat(0.0)))  === Logistic(-Inf)
+	@test round(Logistic(0.0))             === Logistic(-Inf)
+	@test round(Logistic(nextfloat(0.0)))  === Logistic(+Inf)
+	@test round(Logistic(prevfloat(+Inf))) === Logistic(+Inf)
+	@test round(Logistic(+Inf))            === Logistic(+Inf)
+	@test round(Int, Logistic(-Inf))            === 0
+	@test round(Int, Logistic(nextfloat(-Inf))) === 0
+	@test round(Int, Logistic(prevfloat(0.0)))  === 0
+	@test round(Int, Logistic(0.0))             === 0
+	@test round(Int, Logistic(nextfloat(0.0)))  === 1
+	@test round(Int, Logistic(prevfloat(+Inf))) === 1
+	@test round(Int, Logistic(+Inf))            === 1
+	@test round(Bool, Logistic(-Inf))            === false
+	@test round(Bool, Logistic(nextfloat(-Inf))) === false
+	@test round(Bool, Logistic(prevfloat(0.0)))  === false
+	@test round(Bool, Logistic(0.0))             === false
+	@test round(Bool, Logistic(nextfloat(0.0)))  === true
+	@test round(Bool, Logistic(prevfloat(+Inf))) === true
+	@test round(Bool, Logistic(+Inf))            === true
+end
+
 @testset "addition" begin
 	@test Logistic(0.0) + Logistic(0.0) === Logistic(Inf)
 	@test_throws DomainError Logistic(0.0) + Logistic(0.01)
