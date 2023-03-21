@@ -81,6 +81,18 @@ end
 	@test promote_type(Logistic{BigFloat}, BigFloat) == BigFloat
 end
 
+@testset "logitexp" begin
+	@test logitexp(-3) === logit(exp(-3)) === -2.9489308190572983
+	@test logitexp(-1e-12) === 27.63102111592805
+	@test logitexp(-1e+12) === -1e+12
+end
+
+@testset "loglogistic" begin
+	@test loglogistic(-3) === log(logistic(-3)) === -3.048587351573742
+	@test loglogistic(+500) === -7.124576406741286e-218
+	@test loglogistic(-500) === -500.0
+end
+
 @testset "logit" begin
 	@test logit(Logistic(0f0)) === 0f0
 	@test logit(Logistic(0f0)) !== 0.0

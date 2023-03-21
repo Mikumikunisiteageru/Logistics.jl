@@ -9,7 +9,28 @@ end Logistics
 
 import LogExpFunctions: logit, logistic, log1pexp, logexpm1
 
-export Logistic, logit, logistic, logisticate, complement, half
+export Logistic, logisticate, complement, half
+export logit, logistic, logitexp, loglogistic
+
+"""
+	logitexp(x::Real)
+
+Return `logit(exp(x))` evaluated carefully without intermediate calculation 
+of `exp(x)`.
+
+Its inverse is the [`loglogistic`](@ref) function.
+"""
+logitexp(x::Real) = -logexpm1(-x)
+
+"""
+	loglogistic(x::Real)
+
+Return `log(logistic(x))` evaluated carefully without intermediate calculation 
+of `logistic(x)`.
+
+Its inverse is the [`logitexp`](@ref) function.
+"""
+loglogistic(x::Real) = -log1pexp(-x)
 
 """
 	Logistic{T<:AbstractFloat} <: Real
