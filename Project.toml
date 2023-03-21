@@ -1,7 +1,7 @@
 name = "Logistics"
 uuid = "e933307e-f964-4372-9340-e36d39c2f667"
 authors = ["Yu-Chang YANG <yang.yc.allium@gmail.com>"]
-version = "0.1.1"
+version = "0.2.0"
 
 [deps]
 LogExpFunctions = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
