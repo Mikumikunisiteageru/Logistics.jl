@@ -16,6 +16,8 @@ Logistic
 logisticate
 complement
 half
+logitexp
+loglogistic
 ```
 
 ## Functions from LogExpFunctions.jl
