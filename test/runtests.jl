@@ -229,6 +229,8 @@ end
 	@test isnan(Logistic(0.0)) === false
 	@test isnan(Logistic(+Inf)) === false
 	@test isnan(Logistic(NaN)) === true
+	@test Logistic(NaN) != Logistic(NaN)
+	@test Logistic(NaN) === Logistic(NaN)
 end
 
 @testset "hash" begin
