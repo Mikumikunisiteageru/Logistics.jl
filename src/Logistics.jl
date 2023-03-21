@@ -156,6 +156,8 @@ Base.:>=(x::Logistic, y::Logistic) = x.t >= y.t
 
 Base.:(==)(x::Logistic, y::Logistic) = x.t == y.t
 
+Base.:(===)(x::Logistic, y::Logistic) = x.t === y.t
+
 Base.isapprox(x::Logistic, y::Logistic) = isapprox(x.t, y.t)
 
 Base.prevfloat(x::Logistic, d::Integer) = Logistic(prevfloat(x.t, d))
