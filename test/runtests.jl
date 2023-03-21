@@ -96,6 +96,7 @@ end
 	@test logit(1//1) === +Inf 
 	@test_throws DomainError logit(prevfloat(0.0))
 	@test_throws DomainError logit(nextfloat(1.0))
+	@test logit(NaN) === NaN
 end
 
 @testset "log" begin
@@ -104,6 +105,7 @@ end
 	@test log(Logistic(+Inf)) === -0.0
 	@test log(Logistic(-100)) === -100.0
 	@test log(Logistic(+100)) === -3.720075976020836e-44
+	@test log(Logistic(NaN)) === NaN
 end
 
 @testset "logisticate" begin
@@ -123,12 +125,14 @@ end
 	@test logisticate(Logistic{Float32}, 0.5) === Logistic(0.0f0)
 	@test logisticate(Logistic{Float32}, 1.0) === Logistic(+Inf32)
 	@test logisticate(Logistic{Float32}, 1e-30) === Logistic(-69.07755f0)
+	@test isequal(logisticate(NaN), Logistic(NaN))
 end
 
 @testset "complement" begin
 	@test complement(Logistic(-Inf)) == Logistic(+Inf)
 	@test complement(Logistic(0.0)) == Logistic(0.0)
 	@test complement(Logistic(+Inf)) == Logistic(-Inf)
+	@test isequal(complement(Logistic(NaN)), Logistic(NaN))
 end
 
 @testset "zero" begin
@@ -137,6 +141,7 @@ end
 	@test zero(Logistic{Float32}) == Logistic(-Inf32)
 	@test zero(Logistic(1.0)) == Logistic(-Inf)
 	@test zero(Logistic(1f0)) == Logistic(-Inf32)
+	@test zero(Logistic(NaN)) == Logistic(-Inf)
 end
 
 @testset "typemin" begin
@@ -151,6 +156,7 @@ end
 	@test one(Logistic{Float32}) == Logistic(+Inf32)
 	@test one(Logistic(1.0)) == Logistic(+Inf)
 	@test one(Logistic(1f0)) == Logistic(+Inf32)
+	@test one(Logistic(NaN)) == Logistic(+Inf)
 end
 
 @testset "typemax" begin
@@ -184,6 +190,19 @@ end
 	@test isapprox(Logistic(1.0), Logistic(1.0))
 	@test isapprox(Logistic(1.0), prevfloat(Logistic(1.0)))
 	@test isapprox(Logistic(1.0), nextfloat(Logistic(1.0)))
+	@test ! (Logistic(1.0) < Logistic(NaN))
+	@test ! (Logistic(1.0) <= Logistic(NaN))
+	@test ! (Logistic(1.0) > Logistic(NaN))
+	@test ! (Logistic(1.0) >= Logistic(NaN))
+	@test ! (Logistic(1.0) == Logistic(NaN))
+	@test Logistic(1.0) != Logistic(NaN)
+	@test ! (Logistic(NaN) < Logistic(NaN))
+	@test ! (Logistic(NaN) <= Logistic(NaN))
+	@test ! (Logistic(NaN) > Logistic(NaN))
+	@test ! (Logistic(NaN) >= Logistic(NaN))
+	@test ! (Logistic(NaN) == Logistic(NaN))
+	@test Logistic(NaN) != Logistic(NaN)
+	@test isequal(Logistic(NaN), Logistic(NaN))
 end
 
 @testset "prevfloat" begin
@@ -193,6 +212,7 @@ end
 	@test prevfloat(Logistic(-Inf), 10) == Logistic(-Inf)
 	@test prevfloat(Logistic(0.0), 10) == Logistic(-5.0e-323)
 	@test prevfloat(Logistic(+Inf), 10) == Logistic(1.797693134862314e308)
+	@test isequal(prevfloat(Logistic(NaN)), Logistic(NaN))
 end
 
 @testset "nextfloat" begin
@@ -202,12 +222,14 @@ end
 	@test nextfloat(Logistic(-Inf), 10) == Logistic(-1.797693134862314e308)
 	@test nextfloat(Logistic(0.0), 10) == Logistic(5.0e-323)
 	@test nextfloat(Logistic(+Inf), 10) == Logistic(+Inf)
+	@test isequal(nextfloat(Logistic(NaN)), Logistic(NaN))
 end
 
 @testset "eps" begin
 	@test eps(Logistic(-Inf)) == Logistic(-1.7976931348623157e308)
 	@test eps(Logistic(0.0)) == Logistic(-Inf)
 	@test eps(Logistic(+Inf)) == Logistic(-1.7976931348623157e308)
+	@test isequal(eps(Logistic(NaN)), Logistic(NaN))
 end
 
 @testset "isinf" begin
@@ -230,7 +252,7 @@ end
 	@test isnan(Logistic(+Inf)) === false
 	@test isnan(Logistic(NaN)) === true
 	@test Logistic(NaN) != Logistic(NaN)
-	@test Logistic(NaN) === Logistic(NaN)
+	@test isequal(Logistic(NaN), Logistic(NaN))
 end
 
 @testset "hash" begin
@@ -244,14 +266,14 @@ end
 	@test abs(Logistic(-Inf)) === Logistic(-Inf)
 	@test abs(Logistic(0.0)) === Logistic(0.0)
 	@test abs(Logistic(+Inf)) === Logistic(+Inf)
-	@test abs(Logistic(NaN)) === Logistic(NaN)
+	@test isequal(abs(Logistic(NaN)), Logistic(NaN))
 end
 
 @testset "sign" begin
 	@test sign(Logistic(-Inf)) === Logistic(-Inf)
 	@test sign(Logistic(0.0)) === Logistic(+Inf)
 	@test sign(Logistic(+Inf)) === Logistic(+Inf)
-	@test sign(Logistic(NaN)) === Logistic(NaN)
+	@test isequal(sign(Logistic(NaN)), Logistic(NaN))
 end
 
 @testset "trunc" begin
@@ -276,7 +298,7 @@ end
 	@test trunc(Bool, Logistic(nextfloat(0.0)))  === false
 	@test trunc(Bool, Logistic(prevfloat(+Inf))) === false
 	@test trunc(Bool, Logistic(+Inf))            === true
-	@test trunc(Logistic(NaN)) === Logistic(NaN)
+	@test isequal(trunc(Logistic(NaN)), Logistic(NaN))
 	@test_throws InexactError trunc(Int, Logistic(NaN))
 end
 
@@ -302,7 +324,7 @@ end
 	@test floor(Bool, Logistic(nextfloat(0.0)))  === false
 	@test floor(Bool, Logistic(prevfloat(+Inf))) === false
 	@test floor(Bool, Logistic(+Inf))            === true
-	@test floor(Logistic(NaN)) === Logistic(NaN)
+	@test isequal(floor(Logistic(NaN)), Logistic(NaN))
 	@test_throws InexactError floor(Int, Logistic(NaN))
 end
 
@@ -328,7 +350,7 @@ end
 	@test ceil(Bool, Logistic(nextfloat(0.0)))  === true
 	@test ceil(Bool, Logistic(prevfloat(+Inf))) === true
 	@test ceil(Bool, Logistic(+Inf))            === true
-	@test ceil(Logistic(NaN)) === Logistic(NaN)
+	@test isequal(ceil(Logistic(NaN)), Logistic(NaN))
 	@test_throws InexactError ceil(Int, Logistic(NaN))
 end
 
@@ -354,7 +376,7 @@ end
 	@test round(Bool, Logistic(nextfloat(0.0)))  === true
 	@test round(Bool, Logistic(prevfloat(+Inf))) === true
 	@test round(Bool, Logistic(+Inf))            === true
-	@test round(Logistic(NaN)) === Logistic(NaN)
+	@test isequal(round(Logistic(NaN)), Logistic(NaN))
 	@test_throws InexactError round(Int, Logistic(NaN))
 end
 
@@ -371,6 +393,10 @@ end
 	@test Logistic(0.0) + 0.5 === 1.0
 	@test Logistic(-10000) + Logistic(-10000) === Logistic(-9999.30685281944)
 	@test Logistic(-10000) + Logistic(0.0) === Logistic(0.0)
+	@test isequal(Logistic(NaN) + Logistic(NaN), Logistic(NaN))
+	@test isequal(Logistic(NaN) + Logistic(0), Logistic(NaN))
+	@test Logistic(NaN) + NaN === NaN
+	@test Logistic(0) + NaN === NaN
 end
 
 @testset "subtraction" begin
@@ -390,6 +416,12 @@ end
 	@test Logistic(10000) - Logistic(10000) === Logistic(-Inf)
 	@test Logistic(10000) - Logistic(0) === Logistic(0.0)
 	@test Logistic(10000) - Logistic(9999) === Logistic(-9999.458675145386)
+	@test isequal(Logistic(NaN) - Logistic(NaN), Logistic(NaN))
+	@test isequal(Logistic(NaN) - Logistic(0), Logistic(NaN))
+	@test isequal(Logistic(0) - Logistic(NaN), Logistic(NaN))
+	@test Logistic(NaN) - NaN === NaN
+	@test Logistic(0) - NaN === NaN
+	@test NaN - Logistic(0) === NaN
 end
 
 @testset "multiplication" begin
@@ -432,6 +464,10 @@ end
 	@test Logistic(-30) * Logistic(-30) === Logistic(-60.000000000000185)
 	@test Logistic(0) * Logistic(0) === Logistic(-1.0986122886681098)
 	@test Logistic(0) * Logistic(0f0) === Logistic(-1.0986122886681098)
+	@test isequal(Logistic(NaN) * Logistic(NaN), Logistic(NaN))
+	@test isequal(Logistic(NaN) * Logistic(0), Logistic(NaN))
+	@test Logistic(NaN) * NaN === NaN
+	@test Logistic(0) * NaN === NaN
 end
 
 @testset "division" begin
@@ -474,6 +510,12 @@ end
 	@test Logistic(+30) / Logistic(+30) === Logistic(Inf)
 	@test Logistic(0) / Logistic(0) === Logistic(Inf)
 	@test Logistic(Float16(0)) / Logistic(Float32(0)) === Logistic(Inf32)
+	@test isequal(Logistic(NaN) / Logistic(NaN), Logistic(NaN))
+	@test isequal(Logistic(NaN) / Logistic(0), Logistic(NaN))
+	@test isequal(Logistic(0) / Logistic(NaN), Logistic(NaN))
+	@test Logistic(NaN) / NaN === NaN
+	@test Logistic(0) / NaN === NaN
+	@test NaN / Logistic(0) === NaN
 end
 
 @testset "logexpm1" begin
@@ -487,6 +529,7 @@ end
 	@test logexpm1(u2) == log(expm1(u2))
 	@test logexpm1(nextfloat(u2)) == log(expm1(nextfloat(u2)))
 	@test logexpm1(prevfloat(u2)) == log(expm1(prevfloat(u2)))
+	@test logexpm1(NaN) === NaN
 end
 
 @testset "exponentials" begin
@@ -503,16 +546,22 @@ end
 	@test Logistic(-8756.51076269652) ^ 1e-30 === Logistic(60)
 	@test Logistic(0f0) ^ 0 === Logistic(Inf32)
 	@test_throws ErrorException Logistic(0) ^ Logistic(0)
+	@test Logistic(NaN) ^ 0 === Logistic(Inf)
+	@test isequal(Logistic(NaN) ^ 1, Logistic(NaN))
+	@test isequal(Logistic(NaN) ^ 0.5, Logistic(NaN))
+	@test isequal(Logistic(NaN) ^ NaN, Logistic(NaN))
 end
 
 @testset "sqrt" begin
 	@test sqrt(logisticate(0.0)) == logisticate(0.0)
 	@test sqrt(logisticate(1.0)) == logisticate(1.0)
 	@test isapprox(sqrt(logisticate(0.49)), logisticate(0.7))
+	@test isequal(sqrt(Logistic(NaN)), Logistic(NaN))
 end
 
 @testset "cbrt" begin
 	@test cbrt(logisticate(0.0)) == logisticate(0.0)
 	@test cbrt(logisticate(1.0)) == logisticate(1.0)
 	@test isapprox(cbrt(logisticate(0.343)), logisticate(0.7))
+	@test isequal(cbrt(Logistic(NaN)), Logistic(NaN))
 end
