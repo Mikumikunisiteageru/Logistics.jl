@@ -240,6 +240,13 @@ end
 	@test length(Set([Logistic(0), Logistic(0)])) == 1
 end
 
+@testset "abs" begin
+	@test abs(Logistic(-Inf)) === Logistic(-Inf)
+	@test abs(Logistic(0.0)) === Logistic(0.0)
+	@test abs(Logistic(+Inf)) === Logistic(+Inf)
+	@test abs(Logistic(NaN)) === Logistic(NaN)
+end
+
 @testset "addition" begin
 	@test Logistic(0.0) + Logistic(0.0) === Logistic(Inf)
 	@test_throws DomainError Logistic(0.0) + Logistic(0.01)

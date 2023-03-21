@@ -180,6 +180,8 @@ const HASHLOGISTICS = hash("Logistics")
 
 Base.hash(x::Logistic, h::UInt64) = xor(hash(x.t, h), HASHLOGISTICS)
 
+Base.abs(x::Logistic) = x
+
 function Base.:+(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = minmax(x.t, y.t)
 	s = a + b
