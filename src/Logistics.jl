@@ -168,6 +168,12 @@ function Base.eps(x::Logistic)
 	return max(nextfloat(x) - x, x - prevfloat(x))
 end
 
+Base.isinf(::Logistic) = false
+
+Base.isfinite(x::Logistic) = !isnan(x.t)
+
+Base.isnan(x::Logistic) = isnan(x.t)
+
 function Base.:+(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = minmax(x.t, y.t)
 	s = a + b

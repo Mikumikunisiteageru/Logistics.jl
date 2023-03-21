@@ -204,6 +204,27 @@ end
 	@test eps(Logistic(+Inf)) == Logistic(-1.7976931348623157e308)
 end
 
+@testset "isinf" begin
+	@test isinf(Logistic(-Inf)) === false
+	@test isinf(Logistic(0.0)) === false
+	@test isinf(Logistic(+Inf)) === false
+	@test isinf(Logistic(NaN)) === false
+end
+
+@testset "isfinite" begin
+	@test isfinite(Logistic(-Inf)) === true
+	@test isfinite(Logistic(0.0)) === true
+	@test isfinite(Logistic(+Inf)) === true
+	@test isfinite(Logistic(NaN)) === false
+end
+
+@testset "isnan" begin
+	@test isnan(Logistic(-Inf)) === false
+	@test isnan(Logistic(0.0)) === false
+	@test isnan(Logistic(+Inf)) === false
+	@test isnan(Logistic(NaN)) === true
+end
+
 @testset "addition" begin
 	@test Logistic(0.0) + Logistic(0.0) === Logistic(Inf)
 	@test_throws DomainError Logistic(0.0) + Logistic(0.01)
