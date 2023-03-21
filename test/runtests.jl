@@ -225,6 +225,13 @@ end
 	@test isnan(Logistic(NaN)) === true
 end
 
+@testset "hash" begin
+	@test hash(Logistic(0)) != hash(Logistic(-Inf))
+	@test hash(Logistic(0e0)) == hash(Logistic(0f0))
+	@test length(unique([Logistic(0), Logistic(0)])) == 1
+	@test length(Set([Logistic(0), Logistic(0)])) == 1
+end
+
 @testset "addition" begin
 	@test Logistic(0.0) + Logistic(0.0) === Logistic(Inf)
 	@test_throws DomainError Logistic(0.0) + Logistic(0.01)

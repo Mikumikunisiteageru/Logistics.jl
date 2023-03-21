@@ -174,6 +174,10 @@ Base.isfinite(x::Logistic) = !isnan(x.t)
 
 Base.isnan(x::Logistic) = isnan(x.t)
 
+const HASHLOGISTICS = hash("Logistics")
+
+Base.hash(x::Logistic, h::UInt64) = xor(hash(x.t, h), HASHLOGISTICS)
+
 function Base.:+(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = minmax(x.t, y.t)
 	s = a + b
