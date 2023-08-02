@@ -418,6 +418,7 @@ end
 	@test Logistic(0.0) - Logistic(-Inf) === Logistic(0.0)
 	@test Logistic(+Inf) - Logistic(-Inf) === Logistic(+Inf)
 	@test Logistic(+Inf) - Logistic(+Inf) === Logistic(-Inf)
+	@test Logistic(+Inf) - Logistic(-3275.0) === Logistic(+3275.0)
 	@test Logistic(0.0) - Logistic(0.0f0) === Logistic(-Inf)
 	@test Logistic(0.0) - BigFloat(0.5) == BigFloat(0.0)
 	@test Logistic(0.0) - BigFloat(0.5) isa BigFloat

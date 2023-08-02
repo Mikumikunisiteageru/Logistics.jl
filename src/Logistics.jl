@@ -227,12 +227,12 @@ function Base.:-(x::Logistic{T}, y::Logistic{T}) where {T<:AbstractFloat}
 	a, b = x.t, y.t
 	a < b && throw(
 		DomainError(float(x) - float(y), "subtrahend exceeds minuend."))
+	isone(x) && return complement(y)
 	if a <= 0
 		return Logistic(a + log(-expm1(b-a) / (1 + 2 * exp(b) + exp(a+b))))
 	elseif b <= 0
 		return Logistic(log(-expm1(b-a) / (exp(b) + exp(-a) + 2 * exp(b-a))))
 	else
-		isinf(b) && return complement(y)
 		return Logistic(-b + log(-expm1(b-a) / (1 + 2 * exp(-a) + exp(-a-b))))
 	end
 end
